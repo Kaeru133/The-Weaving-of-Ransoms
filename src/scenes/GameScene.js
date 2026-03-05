@@ -1,4 +1,3 @@
-import Phaser from 'phaser';
 import Protagonist from '../entities/Protagonist.js';
 import Ransom from '../entities/Ransom.js';
 

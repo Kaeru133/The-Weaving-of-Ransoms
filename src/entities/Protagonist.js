@@ -1,5 +1,3 @@
-import Phaser from 'phaser';
-
 export default class Protagonist extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y) {
         super(scene, x, y, 'player-sprite');

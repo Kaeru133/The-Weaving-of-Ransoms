@@ -1,4 +1,3 @@
-import Phaser from 'phaser';
 import GameScene from './src/scenes/GameScene.js';
 
 const config = {
