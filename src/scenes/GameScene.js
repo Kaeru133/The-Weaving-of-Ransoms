@@ -78,7 +78,7 @@ export default class GameScene extends Phaser.Scene {
             this.background = this.add.tileSprite(0, 0, this.mapWidth, this.mapHeight, 'grid-bg')
                 .setOrigin(0, 0)
                 .setDepth(-1)
-                .setTint(0x444444); // Start dark
+                .setTint(0x222222); // Darker for better contrast
 
             console.log('GameScene: Spawning player');
             this.player = new Protagonist(this, this.mapWidth / 2, this.mapHeight / 2);
@@ -180,13 +180,13 @@ export default class GameScene extends Phaser.Scene {
         if (this.soundBarrierLayer) {
             this.soundBarrierLayer.clear();
 
-            // Text/Shop normal barrier (4 ransoms)
-            this.soundBarrierLayer.lineStyle(1, 0xaaaaaa, 0.2);
-            this.soundBarrierLayer.strokeCircle(this.player.x, this.player.y, 128);
+            // Text/Shop normal barrier (Observation range)
+            this.soundBarrierLayer.lineStyle(2, 0x00ffff, 0.4); // Neon Cyan
+            this.soundBarrierLayer.strokeCircle(this.player.x, this.player.y, 250);
 
-            // Attack sound barrier (2 ransoms)
-            this.soundBarrierLayer.lineStyle(2, 0xff5555, 0.3); // Slightly thicker and reddish
-            this.soundBarrierLayer.strokeCircle(this.player.x, this.player.y, 64);
+            // Attack sound barrier (Combat range)
+            this.soundBarrierLayer.lineStyle(3, 0xff3333, 0.6); // Vivid Red
+            this.soundBarrierLayer.strokeCircle(this.player.x, this.player.y, 150);
         }
 
         this.player.setVelocity(0);
@@ -227,7 +227,7 @@ export default class GameScene extends Phaser.Scene {
 
         // Handle Melee Combat Over Distances (Inside Attack Barrier: 2 ransoms = 64)
         let targetRansom = null;
-        let shortestDist = 64;
+        let shortestDist = 150; // Increased range from 64
 
         this.ransoms.getChildren().forEach(r => {
             if (!r.active || r.isAttacking) return;
@@ -478,9 +478,9 @@ export default class GameScene extends Phaser.Scene {
         this.updateStatusUI();
         if (!this.isBeingDamaged) {
             this.isBeingDamaged = true;
-            this.player.setTint(0xff0000);
+            this.player.setAlpha(0.5);
             this.time.delayedCall(200, () => {
-                if (this.player && !this.player.isDead) this.player.clearTint();
+                if (this.player && !this.player.isDead) this.player.setAlpha(1);
                 this.isBeingDamaged = false;
             });
         }
@@ -529,7 +529,7 @@ export default class GameScene extends Phaser.Scene {
             this.archangelGlow.fillStyle(0xffffff, 0.1 * factor);
             this.archangelGlow.fillCircle(this.archangel.x, this.archangel.y, 400 * factor);
         } else {
-            this.background.setTint(0x444444);
+            this.background.setTint(0x222222);
             this.background.setAlpha(0.6);
             this.archangelGlow.clear();
         }

@@ -4,8 +4,8 @@ import Ransom from './Ransom.js';
 export default class Boss extends Ransom {
     constructor(scene, x, y) {
         super(scene, x, y);
-        this.setScale(3);
-        this.setTint(0xff0000);
+        this.setScale(0.6); // Match the scale used in GameScene
+        // Removed setTint(0xff0000) to avoid 'red square' artifact in CANVAS mode
         this.health = 500;
         this.maxHealth = 500;
         this.isBoss = true;

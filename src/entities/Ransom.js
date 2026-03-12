@@ -130,10 +130,17 @@ export default class Ransom extends Phaser.Physics.Arcade.Sprite {
 
         if (!this.isDamageTinted) {
             this.isDamageTinted = true;
-            this.setTint(0xffffff);
+            
+            // Brief flicker and scale up slightly for impact
+            const originalAlpha = this.alpha;
+            const originalScale = this.scaleX;
+            this.setAlpha(0.5);
+            this.setScale(originalScale * 1.1);
+            
             this.scene.time.delayedCall(100, () => {
                 if (this.active) {
-                    this.setTint(this.isBoss ? 0xff0000 : 0xffffff);
+                    this.setAlpha(originalAlpha);
+                    this.setScale(originalScale);
                     this.isDamageTinted = false;
                 }
             });
