@@ -229,7 +229,9 @@ export default class GameScene extends Phaser.Scene {
         if (this.player.mana >= 10) {
             this.player.mana -= 10;
             this.updateStatusUI();
+            if (this.webs.countActive(true) >= 10) return; // Limit active projectiles
             const web = this.webs.create(this.player.x, this.player.y, 'web-bullet');
+            web.hasHit = false; // Initialize hasHit flag
 
             // Defend against missing properties if not fully ready
             if (web && web.body) {
@@ -245,17 +247,21 @@ export default class GameScene extends Phaser.Scene {
     }
 
     hitRansom(web, ransom) {
-        if (!web || !web.active || !ransom || !ransom.active) return;
+        if (!web || !web.active || web.hasHit || !ransom || !ransom.active) return;
 
-        // Phaser's safest way to remove an object from physics in a collision step
+        // Immediately mark as hit to prevent re-entry
+        web.hasHit = true;
+        console.log('Fieira hit detected! Target:', ransom.isBoss ? 'Boss' : 'Minion');
+
+        // Disable physics and hide immediately to prevent staying inside collider
         web.disableBody(true, true);
 
         if (!ransom.isAttacking) {
             ransom.takeDamage(15);
         }
 
-        // Clean up safely WITHOUT breaking the physics iteration loop (which causes massive lag)
-        this.time.delayedCall(10, () => {
+        // Clean up safely after physics step
+        this.time.delayedCall(5, () => {
             if (web) web.destroy();
         });
     }
